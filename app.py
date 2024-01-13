@@ -45,7 +45,7 @@ picam2.capture_file("camera.jpg")
 st.image("camera.jpg")
 
 if st.button(label="Refresh",key="refresh"):
-    st.experimental_rerun()
+    st.rerun()
 
 if st.button(label="Open Door",key="open_door"):
     begin_open_door()
