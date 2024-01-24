@@ -2,7 +2,6 @@ from picamera2 import Picamera2, Preview
 import time
 import os
 import datetime
-import streamlit as st
 import RPi.GPIO as GPIO
 import libcamera
 from gpiozero import MotionSensor
@@ -56,7 +55,8 @@ GPIO.add_event_detect(DOOR_BUTTON_PIN,GPIO.FALLING,callback=door_button_callback
 
 #GPIO.wait_for_edge(DOOR_BUTTON_PIN,GPIO.RISING,bouncetime=300)
 #print(GPIO.input(DOOR_BUTTON_PIN))
-message = input("Press enter to quit\n\n") 
+while True:
+    time.sleep(1)
 
 GPIO.cleanup()
 

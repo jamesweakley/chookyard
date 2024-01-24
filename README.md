@@ -22,3 +22,9 @@ Pin layout
 | -                     | -                 |
 | -                     | -                 |
 | -                     | -                 |
+
+
+# Systemd config
+cp systemd_files/* /etc/systemd/system/
+sudo systemctl enable door_opener
+sudo systemctl enable streamlit

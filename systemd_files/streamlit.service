@@ -1,0 +1,19 @@
+
+[Unit]
+Description=Streamlit app for Chookyard management
+ConditionFileIsExecutable=/home/james/venvs/chookyard/bin/streamlit
+After=network.target
+
+[Service]
+StartLimitInterval=5
+StartLimitBurst=10
+ExecStart=/home/james/venvs/chookyard/bin/streamlit "run" "/home/james/chookyard/app.py"
+User=james
+Restart=always
+# restart from failure after 1 hour, just in case we killed the process deliberately to do something
+RestartSec=600
+#EnvironmentFile=-/home/james/chookyard/.env
+WorkingDirectory=/home/james/chookyard
+
+[Install]
+WantedBy=multi-user.target

@@ -67,28 +67,6 @@ def close_door():
         else:
             status.update(label="Door closed",state="complete")
 
-
-def door_button_callback(channel):
-    # append to ./logs/door_button.log
-    with open(os.path.join('logs','door_button.log'), 'a') as f:
-        f.write(f"{datetime.datetime.now().isoformat()}: Door button pressed, channel: {channel}")
-    if get_door_status()=='Open':
-        close_door()
-    else:
-        open_door()
-
-# do this once only
-@st.cache_resource
-def init_pins():
-    GPIO.setmode(GPIO.BCM)
-    #GPIO.setup(WHITE_LED_PIN, GPIO.OUT)
-    GPIO.setup(DOOR_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-    GPIO.remove_event_detect(DOOR_BUTTON_PIN)
-    GPIO.add_event_detect(DOOR_BUTTON_PIN,GPIO.FALLING,callback=door_button_callback)
-    return True
-init_pins()
-
-
 # Cache the camera, it needs to be a singleton
 @st.cache_resource
 def get_camera():
