@@ -47,6 +47,7 @@ def open_door():
             status.update(label="Door did not open",state="error")
         else:
             status.update(label="Door opened",state="complete")
+        update_camera_image()
 
 def close_door():
     with st.status("Closing door...") as status:
@@ -66,6 +67,7 @@ def close_door():
             status.update(label="Door did not close",state="error")
         else:
             status.update(label="Door closed",state="complete")
+        update_camera_image()
 
 # Cache the camera, it needs to be a singleton
 @st.cache_resource
