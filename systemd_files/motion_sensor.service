@@ -1,0 +1,13 @@
+[Unit]
+Description=Motion sensor action service
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=james
+ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/motion_sensor_listen.py.py
+WorkingDirectory=/home/james/chookyard
+
+[Install]
+WantedBy=multi-user.target
