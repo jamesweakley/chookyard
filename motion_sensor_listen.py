@@ -19,7 +19,7 @@ from gpiozero import MotionSensor
 
 def motion_action():
 	current_hour = datetime.datetime.now().hour
-	if current_hour > 7 and current_hour < 19:
+	if current_hour > 7 and current_hour < 18:
 		print("skipping due to daytime")
 		return
 	print("motion detected, turning on eyes")

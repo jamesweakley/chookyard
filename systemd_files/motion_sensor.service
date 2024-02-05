@@ -6,7 +6,7 @@ After=network.target
 Type=idle
 Restart=on-failure
 User=james
-ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/motion_sensor_listen.py.py
+ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/motion_sensor_listen.py
 WorkingDirectory=/home/james/chookyard
 
 [Install]
