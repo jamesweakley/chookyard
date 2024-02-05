@@ -17,6 +17,7 @@ LINEAR_ACTUATOR_B = 6
 DOOR_BUTTON_PIN = 15 # Has a 1K resistor and uses this 3.3V pin, the other pin is set to ground  (physical pin 10)
 LED_EYES_PIN = 18 # Anode side of LED, the other pin is set to ground with a 300 Ohm resistor
 WHITE_LED_PIN = 4 # Anode side of LED, the other pin is set to ground with a 300 Ohm resistor
+DOOR_LATCH_PIN = 18 # 5V relay opening 24V latch
 
 CAMERA_IMAGE_PATH = "/tmp/camera.jpg"
 
@@ -35,13 +36,20 @@ def open_door():
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(LINEAR_ACTUATOR_A, GPIO.OUT)
         GPIO.setup(LINEAR_ACTUATOR_B, GPIO.OUT)
+        GPIO.setup(DOOR_LATCH_PIN, GPIO.OUT)
+        # hold the latch open
+        GPIO.output(DOOR_LATCH_PIN, GPIO.HIGH)
+        # open the linear actuator
         GPIO.output(LINEAR_ACTUATOR_B, GPIO.LOW)
         GPIO.output(LINEAR_ACTUATOR_A, GPIO.HIGH)
         # wait until the door opens
-        # we want to deliberately wait about 6 seconds so that the next
+        # we want to deliberately wait 6 seconds so that the next
         # camera shot is of the fully open door
         for i in range(6):
             st.write(f"Waited {i} seconds, door is {get_door_status()}")
+            # on the fourth second, we can release the door latch (not good to hold it open)
+            if i==4:
+                GPIO.output(DOOR_LATCH_PIN, GPIO.LOW)
             time.sleep(1)
         if get_door_status()=="Closed":
             status.update(label="Door did not open",state="error")
