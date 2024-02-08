@@ -15,7 +15,7 @@ DOOR_SENSOR_PIN = 7 # this is a reed switch, the other pin is ground
 LINEAR_ACTUATOR_A = 5
 LINEAR_ACTUATOR_B = 6
 DOOR_BUTTON_PIN = 15 # Has a 1K resistor and uses this 3.3V pin, the other pin is set to ground  (physical pin 10)
-LED_EYES_PIN = 18 # Anode side of LED, the other pin is set to ground with a 300 Ohm resistor
+LED_EYES_PIN = 24 # Anode side of LED, the other pin is set to ground with a 300 Ohm resistor
 WHITE_LED_PIN = 4 # Anode side of LED, the other pin is set to ground with a 300 Ohm resistor
 DOOR_LATCH_PIN = 18 # 5V relay opening 24V latch
 
@@ -29,6 +29,14 @@ def get_door_status():
     door_status = "Open" if GPIO.input(DOOR_SENSOR_PIN)==1 else "Closed"
     return door_status
 
+def hold_latch():
+    GPIO.setup(DOOR_LATCH_PIN, GPIO.OUT)
+    GPIO.output(DOOR_LATCH_PIN, GPIO.HIGH)
+
+def release_latch():
+    GPIO.setup(DOOR_LATCH_PIN, GPIO.OUT)
+    GPIO.output(DOOR_LATCH_PIN, GPIO.LOW)
+
 def open_door():
     with st.status("Opening door...") as status:
         st.write("Setting output pins")
@@ -38,7 +46,7 @@ def open_door():
         GPIO.setup(LINEAR_ACTUATOR_B, GPIO.OUT)
         GPIO.setup(DOOR_LATCH_PIN, GPIO.OUT)
         # hold the latch open
-        GPIO.output(DOOR_LATCH_PIN, GPIO.HIGH)
+        hold_latch()
         # open the linear actuator
         GPIO.output(LINEAR_ACTUATOR_B, GPIO.LOW)
         GPIO.output(LINEAR_ACTUATOR_A, GPIO.HIGH)
@@ -49,7 +57,7 @@ def open_door():
             st.write(f"Waited {i} seconds, door is {get_door_status()}")
             # on the fourth second, we can release the door latch (not good to hold it open)
             if i==4:
-                GPIO.output(DOOR_LATCH_PIN, GPIO.LOW)
+                release_latch()
             time.sleep(1)
         if get_door_status()=="Closed":
             status.update(label="Door did not open",state="error")
@@ -69,8 +77,11 @@ def close_door():
         seconds_remaining = 10 # if it takes longer than this, something is wrong
         while get_door_status()=="Open" and seconds_remaining > 0:
             st.write(f"Waiting {seconds_remaining} more seconds, door is {get_door_status()}")
+            if seconds_remaining == 8:
+                hold_latch()
             time.sleep(1)
             seconds_remaining = seconds_remaining - 1
+        release_latch()
         if get_door_status()=="Open":
             status.update(label="Door did not close",state="error")
         else:
