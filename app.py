@@ -53,7 +53,7 @@ def open_door():
         # wait until the door opens
         # we want to deliberately wait 6 seconds so that the next
         # camera shot is of the fully open door
-        for i in range(6):
+        for i in range(10):
             st.write(f"Waited {i} seconds, door is {get_door_status()}")
             # on the fourth second, we can release the door latch (not good to hold it open)
             if i==4:
@@ -70,17 +70,23 @@ def close_door():
         st.write("Setting output pins")
         # Set the signal
         GPIO.setmode(GPIO.BCM)
-        GPIO.setup(LINEAR_ACTUATOR_A, GPIO.OUT)
-        GPIO.setup(LINEAR_ACTUATOR_B, GPIO.OUT)
+        try:
+            GPIO.setup(LINEAR_ACTUATOR_A, GPIO.OUT)
+        except:
+            pass
+        try:
+            GPIO.setup(LINEAR_ACTUATOR_B, GPIO.OUT)
+        except:
+            pass
         GPIO.output(LINEAR_ACTUATOR_B, GPIO.HIGH)
         GPIO.output(LINEAR_ACTUATOR_A, GPIO.LOW)
         seconds_remaining = 10 # if it takes longer than this, something is wrong
         while get_door_status()=="Open" and seconds_remaining > 0:
+            seconds_remaining = seconds_remaining - 1
             st.write(f"Waiting {seconds_remaining} more seconds, door is {get_door_status()}")
             if seconds_remaining == 8:
                 hold_latch()
             time.sleep(1)
-            seconds_remaining = seconds_remaining - 1
         release_latch()
         if get_door_status()=="Open":
             status.update(label="Door did not close",state="error")

@@ -1,0 +1,13 @@
+[Unit]
+Description=Nicegui app for Chookyard management
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=james
+ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/nicegui_app.py
+WorkingDirectory=/home/james/chookyard
+
+[Install]
+WantedBy=multi-user.target

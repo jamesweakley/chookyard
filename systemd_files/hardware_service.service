@@ -1,0 +1,13 @@
+[Unit]
+Description=RPC Service for interacting with chookyard hardware
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=james
+ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/hardware_service.py
+WorkingDirectory=/home/james/chookyard
+
+[Install]
+WantedBy=multi-user.target
