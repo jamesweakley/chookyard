@@ -1,12 +1,12 @@
 [Unit]
-Description=Chook hutch door opener
+Description=Chook hutch button listener
 After=network.target
 
 [Service]
 Type=idle
 Restart=on-failure
 User=james
-ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/door_button_listen.py
+ExecStart=/home/james/venvs/chookyard/bin/python /home/james/chookyard/button_listener.py
 WorkingDirectory=/home/james/chookyard
 
 [Install]

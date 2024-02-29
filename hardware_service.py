@@ -7,6 +7,9 @@ import datetime
 import RPi.GPIO as GPIO
 import libcamera
 from gpiozero import MotionSensor
+import sys
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
 # Use GPIO numbers not pin numbers
 # ----- Pins
@@ -59,7 +62,7 @@ class HardwareService(rpyc.Service):
             seconds_remaining = 10 # if it takes longer than this, something is wrong
             while self.get_door_status()=="Open" and seconds_remaining > 0:
                 seconds_remaining = seconds_remaining - 1
-                print(f"Waiting {seconds_remaining} more seconds, door is {get_door_status()}")
+                print(f"Waiting {seconds_remaining} more seconds, door is {self.get_door_status()}")
                 if seconds_remaining == 8:
                     self.hold_latch()
                 time.sleep(1)
