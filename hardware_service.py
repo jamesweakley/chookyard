@@ -41,6 +41,9 @@ class HardwareService(rpyc.Service):
         self.picam2.configure(config)
         self.picam2.start()
         time.sleep(1)
+    
+    def test(self) -> bool:
+        return True
 
     def get_door_status(self) -> str:
         door_status = "Open" if GPIO.input(DOOR_SENSOR_PIN)==1 else "Closed"

@@ -50,8 +50,12 @@ GPIO.setup(DOOR_BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 #print(GPIO.input(DOOR_BUTTON_PIN))
 while True:
     logging.info("waiting for button press edge")
-    GPIO.wait_for_edge(DOOR_BUTTON_PIN,GPIO.RISING,bouncetime=300)
-    #print(GPIO.input(DOOR_BUTTON_PIN))
-    door_button_callback()
+    GPIO.wait_for_edge(DOOR_BUTTON_PIN,GPIO.FALLING)
+    time.sleep(1)
+    if GPIO.input(DOOR_BUTTON_PIN) == GPIO.LOW:
+        print("Button was properly pressed")
+    else:
+        print("Button was improperly pressed")
+    #door_button_callback()
 GPIO.cleanup()
 

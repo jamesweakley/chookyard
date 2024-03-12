@@ -22,6 +22,15 @@
         "presentation": {
           "reveal": "always"
         }
+      },
+      {
+        "label": "Restart hardware service",
+        "type": "shell",
+        "command": "sudo systemctl restart hardware_service",
+        "presentation": {
+          "reveal": "always"
+        }
       }
+      
     ]
 }
