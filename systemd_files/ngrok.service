@@ -1,0 +1,13 @@
+[Unit]
+Description=ngrok tunnel for external access
+After=network.target
+
+[Service]
+Type=idle
+Restart=on-failure
+User=james
+ExecStart=/usr/local/bin/ngrok start chookyard
+WorkingDirectory=/home/james/chookyard
+
+[Install]
+WantedBy=multi-user.target
