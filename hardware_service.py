@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 import libcamera
 from gpiozero import MotionSensor
 import sys
+import subprocess
 
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
 
@@ -25,6 +26,9 @@ CAMERA_IMAGE_PATH = "/tmp/camera.jpg"
 
 #last_button_press = datetime.datetime.now() - datetime.timedelta(seconds=5)
 
+TAKE_SCREENSHOT_COMMAND = "ffmpeg -rtsp_transport tcp -i rtsp://@127.0.0.1:8554/my_camera -update true -frames:v 1 /tmp/camera.jpg -y"
+
+
 class HardwareService(rpyc.Service):
     def __init__(self) -> None:
         super().__init__()
@@ -35,12 +39,12 @@ class HardwareService(rpyc.Service):
         GPIO.setup(LINEAR_ACTUATOR_B, GPIO.OUT)
         GPIO.setup(DOOR_LATCH_PIN,GPIO.OUT)
         GPIO.setup(LED_EYES_PIN, GPIO.OUT)
-        logging.info("Initializing camera...")
-        self.picam2 = Picamera2()
-        config = self.picam2.create_still_configuration(transform=libcamera.Transform(hflip=1, vflip=1))
-        self.picam2.configure(config)
-        self.picam2.start()
-        time.sleep(1)
+        #logging.info("Initializing camera...")
+        #self.picam2 = Picamera2()
+        #config = self.picam2.create_still_configuration(transform=libcamera.Transform(hflip=1, vflip=1))
+        #self.picam2.configure(config)
+        #self.picam2.start()
+        #time.sleep(1)
     
     def test(self) -> bool:
         return True
@@ -50,7 +54,8 @@ class HardwareService(rpyc.Service):
         return door_status
 
     def capture_camera_image(self):
-        self.picam2.capture_file(CAMERA_IMAGE_PATH)
+        #self.picam2.capture_file(CAMERA_IMAGE_PATH)
+        subprocess.run(TAKE_SCREENSHOT_COMMAND.split(' '))
 
     def get_red_eyes_status(self) -> str:
         led_status = "On" if GPIO.input(LED_EYES_PIN)==1 else "Off"

@@ -1,3 +1,4 @@
 camera.jpg
 logs/door_button.log
 __pycache__/
+.env

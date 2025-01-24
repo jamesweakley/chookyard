@@ -23,7 +23,7 @@ def open_door():
     with st.status("Opening door...") as status:
         st.write("Closing door")
         result = get_hardware_service().open_door()
-        status.update(label=result,state="error" if 'not' in  result else "complete")
+        status.update(label=result,state="error" if 'not' in (result or {}) else "complete")
         get_hardware_service().capture_camera_image()
 
 def close_door():
